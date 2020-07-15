@@ -103,18 +103,23 @@ export default {
           .post("https://dev.cargo.direct/api/login", bodyFormData)
           .then(data => {
             if (data.data.message == "Успешно авторизован.") {
+              this.$store.commit("newToken", data.data.data.token);
               this.err = false;
               this.$router.push("/carrier/user/company");
             } else {
-              if (data.data.errors.phone != undefined) {
-                this.$refs.login_phone_error.innerHTML = data.data.errors.phone;
-              }
-              if (data.data.errors.error != undefined) {
-                this.$refs.login_phone_error.innerHTML = data.data.errors.error;
-              }
-              if (data.data.errors.password != undefined) {
-                this.$refs.login_password_error.innerHTML =
-                  data.data.errors.password;
+              if (data.data.errors != undefined) {
+                if (data.data.errors.phone != undefined) {
+                  this.$refs.login_phone_error.innerHTML =
+                    data.data.errors.phone;
+                }
+                if (data.data.errors.error != undefined) {
+                  this.$refs.login_phone_error.innerHTML =
+                    data.data.errors.error;
+                }
+                if (data.data.errors.password != undefined) {
+                  this.$refs.login_password_error.innerHTML =
+                    data.data.errors.password;
+                }
               }
             }
           });

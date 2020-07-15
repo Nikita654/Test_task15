@@ -30,9 +30,11 @@
           <div class="content-body">
             <div class="form-body">
               <div class="form-group field-profile-inn" id="company-info-block">
-                <span>ИНН / КПП</span> : 5027234975 / 502701001
+                <span>ИНН / КПП</span>
+                : {{inn}} / {{kpp}}
                 <br />
-                <span>Организация</span> : ООО "РД ТРАНСПОРТ"
+                <span>Организация</span>
+                : {{nameCompany}}
               </div>
 
               <div class="form-group field-companyprofile-count_cars required">
@@ -41,11 +43,11 @@
                   for="companyprofile-count_cars"
                 >Общее количество машин в собственности</label>
                 <input
+                  v-model="countTrucks"
                   type="text"
                   id="companyprofile-count_cars"
                   class="form-control"
                   name="CompanyProfile[count_cars]"
-                  value="3"
                   autocomplete="off"
                   placeholder="Общее количество машин в собственности"
                   aria-required="true"
@@ -62,6 +64,7 @@
                   >?</span>
                 </label>
                 <input
+                  v-model="postAddress"
                   type="text"
                   id="companyprofile-post_address"
                   class="form-control"
@@ -77,6 +80,7 @@
               <div class="form-group field-companyprofile-site">
                 <label class="control-label" for="companyprofile-site">Сайт компании</label>
                 <input
+                  v-model="site"
                   type="text"
                   id="companyprofile-site"
                   class="form-control"
@@ -108,7 +112,7 @@
                 <div class="company-suggestions-container">
                   <div
                     @mouseleave="statusBankCh = false"
-                    v-show="statusBankCh"
+                    v-show="statusBankCh&&banksChooses.length>0"
                     class="company-suggestions"
                   >
                     <div
@@ -166,6 +170,7 @@
               <div class="form-group field-companyprofile-schet">
                 <label class="control-label" for="companyprofile-schet">Номер банковского счета</label>
                 <input
+                  v-model="bankAccount"
                   type="text"
                   id="companyprofile-schet"
                   class="form-control"
@@ -205,7 +210,10 @@
                               <button type="button" class="save-file btn btn-xs btn-default">
                                 <i class="glyphicon glyphicon-save text-success"></i>
                               </button>
-                              <a class="kv-file-download btn btn-xs btn-default">
+                              <a
+                                :href="contractsDown"
+                                class="kv-file-download btn btn-xs btn-default"
+                              >
                                 <i class="glyphicon glyphicon-search text-success"></i>
                               </a>
                               <button
@@ -265,7 +273,7 @@
 
                 <div class="company-form-download">
                   <div class="form-group" style>
-                    <a class="btn btn-brand-outline">Скачать шаблон</a>
+                    <a :href="contractLink" class="btn btn-brand-outline">Скачать шаблон</a>
                   </div>
                 </div>
               </div>
@@ -278,7 +286,7 @@
                   >?</span>
                 </label>
                 <div class="col-md-12">
-                  <p class="form-control-static">Нет</p>
+                  <p class="form-control-static">{{(statusOriginal==1)?'Да':'Нет'}}</p>
                 </div>
               </div>
               <div class="form-group">
@@ -290,7 +298,7 @@
                   >?</span>
                 </label>
                 <div class="col-md-12">
-                  <p class="form-control-static">Нет</p>
+                  <p class="form-control-static">{{(date!='')?date:'Нет'}}</p>
                 </div>
               </div>
               <div class="form-group">
@@ -302,7 +310,7 @@
                   >?</span>
                 </label>
                 <div class="col-md-12">
-                  <p class="form-control-static">Не подписаны</p>
+                  <p class="form-control-static">{{(statusDraw==1)?'Подписаны':'Не подписаны'}}</p>
                 </div>
               </div>
               <div class="clearfix"></div>
@@ -327,6 +335,18 @@ export default {
       codeChoose: "",
       bankName: "",
       korCount: "",
+      site: "",
+      countTrucks: "",
+      bankAccount: "",
+      contractLink: "",
+      postAddress: "",
+      nameCompany: "",
+      inn: "",
+      kpp: "",
+      date: "",
+      statusOriginal: 0,
+      statusDraw: 0,
+      contractsDown: "",
       statusBankCh: false,
       banksChooses: []
     };
@@ -339,6 +359,9 @@ export default {
       this.bankName = bank.value;
       this.statusBankCh = false;
     }
+  },
+  computed: {
+    ...mapState(["userToken"])
   },
   watch: {
     codeBIK(val) {
@@ -363,28 +386,43 @@ export default {
     }
   },
   mounted() {
-    /* let bodyFormData = new FormData();
-    bodyFormData.set(
-      "Authorization",
-      "5d7f541af5b3cc8e369890f92a07574ecc68861a"
-    );*/
-    /*let token = "5d7f541af5b3cc8e369890f92a07574ecc68861a";
-    let query = "04";
+    let url = "https://dev.cargo.direct/api/company-profile";
     let options = {
-    method: "POST",
-    mode: "cors",
-    headers: {
+      method: "GET",
+      mode: "cors",
+      headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": "Token " + token
-    },
-    body: JSON.stringify({query: query})
-}
-    Vue.axios
-      .post("https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/bank", options)
-      .then(data => {
+        Accept: "application/json",
+        Authorization: "Bearer " + this.userToken
+      }
+    };
+    fetch(url, options)
+      .then(response => response.text())
+      .then(result => {
+        let data = JSON.parse(result).data;
         console.log(data);
-      });*/
+        this.codeBIK = data.bik != null ? data.bik : "";
+        this.bankName = data.bank_title != null ? data.bank_title : "";
+        this.korCount = data.corr_account != null ? data.corr_account : "";
+        this.site = data.site != null ? data.site : "";
+        this.bankAccount = data.bank_account != null ? data.bank_account : "";
+        this.countTrucks = data.count_trucks != null ? data.count_trucks : "";
+        this.contractLink =
+          data.edo_contract_link != null ? data.edo_contract_link : "";
+        this.postAddress = data.post_address != null ? data.post_address : "";
+        this.nameCompany = data.organization != null ? data.organization : "";
+        this.inn = data.inn != null ? data.inn : "";
+        this.kpp = data.kpp != null ? data.kpp : "";
+        this.date = data.edo_date != null ? data.edo_date : "";
+        this.statusOriginal =
+          data.edo_original != null ? data.edo_original : "";
+        this.contractsDown =
+          data.edo_contracts.length != 0 ? data.edo_contracts[0] : "";
+        //Поле которое осталось под вопросом из документации
+        this.statusDraw = data.edo_original != null ? data.edo_original : "";
+        //edo_scan_checked
+        //scan_edo
+      });
   }
 };
 </script>
@@ -628,6 +666,19 @@ export default {
     width: 100%;
     margin-bottom: 3px;
     margin-left: -6px;
+    &-footer {
+      height: 25px;
+      text-align: right;
+      .btn {
+        width: 25px;
+        height: 25px;
+      }
+      i {
+        display: inline-block;
+        line-height: 14px;
+        -webkit-font-smoothing: antialiased;
+      }
+    }
     &-frame {
       width: 240px;
       text-align: left;
@@ -641,19 +692,6 @@ export default {
         height: 20px;
         width: 160px;
         display: inline-block;
-      }
-      &-footer {
-        height: 25px;
-        text-align: right;
-        .btn {
-          width: 25px;
-          height: 25px;
-        }
-        i {
-          display: inline-block;
-          line-height: 14px;
-          -webkit-font-smoothing: antialiased;
-        }
       }
       .btn-file input[type="file"] {
         top: 0;
