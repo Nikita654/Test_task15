@@ -112,17 +112,17 @@
                     class="company-suggestions"
                   >
                     <div
-                      v-for="(bank, index) in banksChooses"
+                      v-for="(bank, index) in banksChooses.slice(0,5)"
                       :key="`bankName-${index}`"
                       class="company-suggestions-item"
                       @click="bankChoose(bank)"
                     >
-                      <span class="suggestions-value">{{bank.bank_title}}</span>
+                      <span class="suggestions-value">{{bank.value}}</span>
                       <div class="company-suggestions-text">
                         <span
                           class="company-suggestions-text company-suggestions-text_inline"
-                        >{{bank.bik}}</span>
-                        {{bank.post_address}}
+                        >{{bank.data.bic}}</span>
+                        {{bank.data.address.value}}
                       </div>
                     </div>
                   </div>
@@ -328,63 +328,63 @@ export default {
       bankName: "",
       korCount: "",
       statusBankCh: false,
-      banksChooses: [
-        {
-          bank_title: "Банк «ИТУРУП» (ООО)",
-          corr_account: "30101810222026311904",
-          bik: "046401772",
-          post_address: "г Южно-Сахалинск"
-        },
-        {
-          bank_title: "КБ «Долинск» (АО)",
-          corr_account: "30101810222026311904",
-          bik: "046401727",
-          post_address: "г Южно-Сахалинск"
-        },
-        {
-          bank_title: 'АО РНКО "ХОЛМСК"',
-          corr_account: "30101810222026311904",
-          bik: "046401989",
-          post_address: "г Южно-Сахалинск"
-        },
-        {
-          bank_title: 'САХАЛИНСКИЙ РФ АО "РОССЕЛЬХОЗБАНК"',
-          corr_account: "30101810222026311904",
-          bik: "046401747",
-          post_address: "г Южно-Сахалинск"
-        },
-        {
-          bank_title: 'ФИЛИАЛ ООО "ЭКСПОБАНК" В Г. ЮЖНО-САХАЛИНСКЕ',
-          corr_account: "30101810222026311904",
-          bik: "046401444",
-          post_address: "г Южно-Сахалинск"
-        }
-      ]
+      banksChooses: []
     };
   },
 
   methods: {
     bankChoose(bank) {
-      this.codeBIK = bank.bik;
-      this.korCount = bank.corr_account;
-      this.bankName = bank.bank_title;
+      this.codeBIK = bank.data.bic;
+      this.korCount = bank.data.correspondent_account;
+      this.bankName = bank.value;
       this.statusBankCh = false;
     }
   },
   watch: {
-    codeBIK(val) {}
+    codeBIK(val) {
+      let url =
+        "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/bank";
+      let token = "5d7f541af5b3cc8e369890f92a07574ecc68861a";
+      let query = val;
+      let options = {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Token " + token
+        },
+        body: JSON.stringify({ query: query })
+      };
+      fetch(url, options)
+        .then(response => response.text())
+        .then(result => (this.banksChooses = JSON.parse(result).suggestions))
+        .catch();
+    }
   },
   mounted() {
-    let bodyFormData = new FormData();
+    /* let bodyFormData = new FormData();
     bodyFormData.set(
       "Authorization",
       "5d7f541af5b3cc8e369890f92a07574ecc68861a"
-    );
+    );*/
+    /*let token = "5d7f541af5b3cc8e369890f92a07574ecc68861a";
+    let query = "04";
+    let options = {
+    method: "POST",
+    mode: "cors",
+    headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": "Token " + token
+    },
+    body: JSON.stringify({query: query})
+}
     Vue.axios
-      .post("https://dev.cargo.direct/api/company-profile", bodyFormData)
+      .post("https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/bank", options)
       .then(data => {
         console.log(data);
-      });
+      });*/
   }
 };
 </script>
