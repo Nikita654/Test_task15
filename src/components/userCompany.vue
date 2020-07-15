@@ -53,14 +53,14 @@
                   aria-required="true"
                 />
 
-                <p class="company-help-block company-help-block-error"></p>
+                <p ref="count_trucks" class="company-help-block company-help-block-error"></p>
               </div>
               <div class="form-group field-companyprofile-post_address required">
                 <label class="control-label" for="companyprofile-post_address">
                   Почтовый адрес
                   <span
                     class="popovers label-popovers"
-                    title="Пожалуйста, заполните почтовый адрес, и документы по перевозкам будут доставлены максимально быстро."
+                    v-tooltip="'Пожалуйста, заполните почтовый адрес, и документы по перевозкам будут доставлены максимально быстро.'"
                   >?</span>
                 </label>
                 <input
@@ -75,7 +75,7 @@
                   aria-required="true"
                 />
 
-                <p class="company-help-block company-help-block-error"></p>
+                <p ref="post_address" class="company-help-block company-help-block-error"></p>
               </div>
               <div class="form-group field-companyprofile-site">
                 <label class="control-label" for="companyprofile-site">Сайт компании</label>
@@ -131,7 +131,7 @@
                     </div>
                   </div>
                 </div>
-                <p class="company-help-block company-help-block-error"></p>
+                <p ref="bik" class="company-help-block company-help-block-error"></p>
               </div>
               <div class="form-group field-companyprofile-bank_title">
                 <label class="control-label" for="companyprofile-bank_title">Наименование Банка</label>
@@ -148,7 +148,7 @@
                   autocomplete="off"
                   placeholder="Наименование Банка"
                 />
-                <p class="company-help-block company-help-block-error"></p>
+                <p ref="bank_title" class="company-help-block company-help-block-error"></p>
               </div>
               <div class="form-group field-companyprofile-corr_schet">
                 <label class="control-label" for="companyprofile-corr_schet">Корреспондентский счет</label>
@@ -165,7 +165,7 @@
                   autocomplete="off"
                   placeholder="Корреспондентский счет"
                 />
-                <p class="company-help-block company-help-block-error"></p>
+                <p ref="corr_account" class="company-help-block company-help-block-error"></p>
               </div>
               <div class="form-group field-companyprofile-schet">
                 <label class="control-label" for="companyprofile-schet">Номер банковского счета</label>
@@ -181,7 +181,7 @@
                   autocomplete="off"
                   placeholder="Номер банковского счета"
                 />
-                <p class="company-help-block company-help-block-error"></p>
+                <p ref="bank_account" class="company-help-block company-help-block-error"></p>
               </div>
 
               <div class="company-form-download-container">
@@ -219,7 +219,7 @@
                               <button
                                 type="button"
                                 class="kv-file-remove btn btn-sm btn-kv btn-default btn-outline-secondary"
-                                title="Remove file"
+                                v-tooltip="'Remove file'"
                               >
                                 <i class="glyphicon glyphicon-trash"></i>
                               </button>
@@ -236,14 +236,14 @@
 
                       <button
                         type="button"
-                        title="Abort ongoing upload"
+                        v-tooltip="'Abort ongoing upload'"
                         class="btn btn-default btn-secondary company-hidden fileinput-cancel fileinput-cancel-button"
                       >
                         <i class="glyphicon glyphicon-ban-circle"></i>
                         <span class="hidden-xs">Cancel</span>
                       </button>
                       <a
-                        title="Загрузить и сохранить"
+                        v-tooltip="'Загрузить и сохранить'"
                         class="btn btn-default btn-secondary fileinput-upload company-upload-button"
                       >
                         <i class="glyphicon glyphicon-upload"></i>
@@ -252,6 +252,7 @@
                       <div class="btn btn-brand btn-file">
                         <i class="glyphicon glyphicon-folder-open"></i>&nbsp;
                         <input
+                          ref="myFiles"
                           type="file"
                           id="companyprofile-scan_edo"
                           class="input_field_file_on_event"
@@ -261,13 +262,13 @@
                       </div>
                     </div>
 
-                    <p class="company-help-block company-help-block-error"></p>
+                    <p ref="edo_contracts" class="company-help-block company-help-block-error"></p>
                   </div>
                 </div>
                 <div class="content-help-symbol">
                   <span
                     class="popovers label-popovers"
-                    title="Распечатайте указанный документ из приветственного письма или профиля, подпишите у уполномоченного лица вашей компании (лица, имеющего права действовать без доверенности от имени компании, либо лица, наделенного полномочиями по взаимодействию с GroozGo). Прикрепите документ в профиль или отправьте в ответе на приветственное письмо, направленное после регистрации. После этого ваша компания сможет совершать юридически значимые действия на сервисе GroozGo – заключать договоры, размещать и/или принимать к исполнению заказы на перевозку"
+                    v-tooltip="'Распечатайте указанный документ из приветственного письма или профиля, подпишите у уполномоченного лица вашей компании (лица, имеющего права действовать без доверенности от имени компании, либо лица, наделенного полномочиями по взаимодействию с GroozGo). Прикрепите документ в профиль или отправьте в ответе на приветственное письмо, направленное после регистрации. После этого ваша компания сможет совершать юридически значимые действия на сервисе GroozGo – заключать договоры, размещать и/или принимать к исполнению заказы на перевозку'"
                   >?</span>
                 </div>
 
@@ -282,7 +283,7 @@
                   Получен оригинал соглашения об электронном взаимодействии&nbsp;
                   <span
                     class="popovers label-popovers"
-                    title="Если оригинал не получен - значение “Нет”"
+                    v-tooltip="'Если оригинал не получен - значение “Нет”'"
                   >?</span>
                 </label>
                 <div class="col-md-12">
@@ -294,7 +295,7 @@
                   Срок действия соглашения об электронном взаимодействии&nbsp;
                   <span
                     class="popovers label-popovers"
-                    title="Срок устанавливается при проверке скан-копии или оригинала Соглашения об электронном взаимодействии. До получения оригинала срок – 30 дней с даты проверки скан-копии"
+                    v-tooltip="'Срок устанавливается при проверке скан-копии или оригинала Соглашения об электронном взаимодействии. До получения оригинала срок – 30 дней с даты проверки скан-копии'"
                   >?</span>
                 </label>
                 <div class="col-md-12">
@@ -306,7 +307,7 @@
                   Статус подписания документов ЭДО&nbsp;
                   <span
                     class="popovers label-popovers"
-                    title="Если вы отказались от подписания договоров и соглашений и/или не предоставили соглашение об электронном взаимодействии - значение “Не подписаны”"
+                    v-tooltip="'Если вы отказались от подписания договоров и соглашений и/или не предоставили соглашение об электронном взаимодействии - значение “Не подписаны”'"
                   >?</span>
                 </label>
                 <div class="col-md-12">
@@ -315,7 +316,7 @@
               </div>
               <div class="clearfix"></div>
             </div>
-            <button type="submit" class="btn btn-brand btn-save">Сохранить</button>
+            <button @click="saveData" type="submit" class="btn btn-brand btn-save">Сохранить</button>
           </div>
         </div>
       </div>
@@ -358,6 +359,60 @@ export default {
       this.korCount = bank.data.correspondent_account;
       this.bankName = bank.value;
       this.statusBankCh = false;
+    },
+    saveData() {
+      if (
+        this.codeBIK != "" &&
+        this.countTrucks != "" &&
+        this.postAddress != "" &&
+        this.bankName != "" &&
+        this.korCount != "" &&
+        this.bankAccount != ""
+      ) {
+        /*let bodyFormData= new FormData;
+         bodyFormData.set('count_trucks',this.countTrucks);
+         bodyFormData.set('post_address',this.postAddress);
+         bodyFormData.set('bik',this.codeBIK);
+         bodyFormData.set('bank_title',this.bankName);
+         bodyFormData.set('corr_account',this.korCount);
+         bodyFormData.set('bank_account',this.bankAccount);
+         bodyFormData.set('site',this.site);
+         bodyFormData.append("edo_contracts", this.$refs.myFiles.files[0]);*/
+
+        let bodyFormData = {
+          count_trucks: this.countTrucks,
+          post_address: this.postAddress,
+          bik: this.codeBIK,
+          bank_title: this.bankName,
+          corr_account: this.korCount,
+          bank_account: this.bankAccount,
+          site: this.site,
+          edo_contracts: ""
+        };
+        //'Content-Type': 'multipart/form-data'
+        let url = "https://dev.cargo.direct/api/company-profile";
+        let options = {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: "Bearer " + this.userToken
+          },
+          body: JSON.stringify(bodyFormData)
+        };
+        fetch(url, options)
+          .then(response => response.text())
+          .then(result => {
+            let data = JSON.parse(result);
+            console.log(data);
+            if (data.errors != undefined) {
+              for (let [key, text] of Object.entries(data.errors)) {
+                this.$refs[key].innerHTML = text;
+              }
+            }
+          });
+      }
     }
   },
   computed: {
@@ -386,6 +441,10 @@ export default {
     }
   },
   mounted() {
+    let tok = localStorage.getItem("token");
+    if (tok != undefined && tok != null) {
+      this.$store.commit("newToken", tok);
+    }
     let url = "https://dev.cargo.direct/api/company-profile";
     let options = {
       method: "GET",
@@ -524,6 +583,7 @@ export default {
   .company-help-block {
     margin-top: 0px;
     margin-bottom: 5px;
+    color: $danger-color;
   }
 
   .company-breadcrumb {

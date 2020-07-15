@@ -9,6 +9,7 @@ export const store = new Vuex.Store({
   mutations: {
     newToken(state, token) {
       state.userToken = token;
+      localStorage.setItem("token", token);
     }
   },
   actions: {}

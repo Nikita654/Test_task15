@@ -192,6 +192,9 @@ label {
     height: 34px;
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
       -webkit-box-shadow ease-in-out 0.15s;
+    @media (max-width: 550px) {
+      font-size: 16px;
+    }
     &:focus {
       border-color: $blue-color;
       outline: 0;
