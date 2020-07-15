@@ -520,6 +520,10 @@ export default {
     border-radius: 50%;
     margin-left: 3px;
     text-align: center;
+    @media (max-width: 1025px) {
+      opacity:0;
+      z-index: -10000;
+    }
   }
   .company-bar {
     border-bottom: 1px solid $light-color;
