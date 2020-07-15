@@ -109,6 +109,9 @@ export default {
               if (data.data.errors.phone != undefined) {
                 this.$refs.login_phone_error.innerHTML = data.data.errors.phone;
               }
+              if (data.data.errors.error != undefined) {
+                this.$refs.login_phone_error.innerHTML = data.data.errors.error;
+              }
               if (data.data.errors.password != undefined) {
                 this.$refs.login_password_error.innerHTML =
                   data.data.errors.password;
