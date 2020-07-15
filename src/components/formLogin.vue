@@ -88,36 +88,43 @@ export default {
       this.labelL = false;
     },
     next() {
-      if (
-        this.phoneNumber == "+7-911-111-11-14" &&
-        this.passWord == "groozgo123"
-      ) {
-        this.err = false;
-        this.$router.push("/carrier/user/company");
+      if (this.phoneNumber.length == 16 && this.passWord.length > 7) {
+        let phone;
+        phone = this.phoneNumber
+          .split("+")
+          .join("")
+          .split("-")
+          .join("");
+        phone = phone.slice(1);
+        let bodyFormData = new FormData();
+        bodyFormData.set("phone", phone);
+        bodyFormData.set("password", this.passWord);
+        Vue.axios
+          .post("https://dev.cargo.direct/api/login", bodyFormData)
+          .then(data => {
+            if (data.data.message == "Успешно авторизован.") {
+              this.err = false;
+              this.$router.push("/carrier/user/company");
+            } else {
+              if (data.data.errors.phone != undefined) {
+                this.$refs.login_phone_error.innerHTML = data.data.errors.phone;
+              }
+              if (data.data.errors.password != undefined) {
+                this.$refs.login_password_error.innerHTML =
+                  data.data.errors.password;
+              }
+            }
+          });
       } else {
-        if (this.phoneNumber != "+7-911-111-11-14") {
-          if (this.phoneNumber.length == 16) {
-          this.$refs.login_phone_error.innerHTML = "Неверный номер телефона";
-          }else{
-          this.$refs.login_phone_error.innerHTML = "Номер слишком короткий";  
-          }
+        if (this.phoneNumber.length < 16) {
+          this.$refs.login_phone_error.innerHTML = "Номер слишком короткий";
         }
-        if (this.passWord != "groozgo123") {
-          if (this.passWord.length > 7) {
-          this.$refs.login_password_error.innerHTML = "Неверный пароль";
-          }else{
-          this.$refs.login_password_error.innerHTML = "Пароль не менее 8 символов";  
-          }
+        if (this.passWord.length < 8) {
+          this.$refs.login_password_error.innerHTML =
+            "Пароль не менее 8 символов";
         }
         this.err = true;
       }
-      let obj={
-           phone:this.phoneNumber,
-           password:this.passWord
-         }
-        Vue.axios.post("https://dev.cargo.direct/api/login",JSON.stringify(obj)).then(data => {
-         console.log(data)
-        })
     }
   }
 };

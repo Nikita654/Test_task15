@@ -375,12 +375,16 @@ export default {
     codeBIK(val) {}
   },
   mounted() {
-         let obj={
-           Authorization:'5d7f541af5b3cc8e369890f92a07574ecc68861a'
-         }
-        Vue.axios.post("https://dev.cargo.direct/company-profile",JSON.stringify(obj)).then(data => {
-         console.log(data)
-        })
+    let bodyFormData = new FormData();
+    bodyFormData.set(
+      "Authorization",
+      "5d7f541af5b3cc8e369890f92a07574ecc68861a"
+    );
+    Vue.axios
+      .post("https://dev.cargo.direct/api/company-profile", bodyFormData)
+      .then(data => {
+        console.log(data);
+      });
   }
 };
 </script>
